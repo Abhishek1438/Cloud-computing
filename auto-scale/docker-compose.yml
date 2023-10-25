@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+    nginx-loadbalancer:
+        image: nginx
+        ports:
+            - "80:80"
+        deploy:
+            replicas: 1
+            update_config:
+                parallelism: 2
+                delay: 10s
+            restart_policy:
+                condition: on-failure
+        networks:
+            - app-net
+
+    web-app:
+        image: your-web-app-image:tag
+        ports:
+            - "5000:5000"
+        deploy:
+            replicas: 3
+            update_config:
+                parallelism: 2
+                delay: 10s
+            restart_policy:
+                condition: on-failure
+        networks:
+            - app-net
+networks:
+    app-net:
